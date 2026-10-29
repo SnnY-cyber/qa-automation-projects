@@ -8,9 +8,12 @@ export default defineConfig({
   reporter: [['list'], ['html', { open: 'never' }]],
   use: {
     baseURL: 'https://www.saucedemo.com',
+    testIdAttribute: 'data-test',
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
     ...devices['Desktop Chrome'],
   },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
 });
+
+
