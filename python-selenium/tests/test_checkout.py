@@ -3,7 +3,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
 BASE_URL = 'https://www.saucedemo.com/'
-WAIT_SECONDS = 12
+WAIT_SECONDS = 30
 
 def sign_in(driver, username='standard_user', password='secret_sauce'):
     driver.get(BASE_URL)
@@ -16,7 +16,7 @@ def sign_in(driver, username='standard_user', password='secret_sauce'):
 def test_standard_user_completes_checkout(driver):
     wait = sign_in(driver)
     wait.until(EC.url_contains('inventory.html'))
-    driver.find_element(By.CSS_SELECTOR, '[data-test="add-to-cart-sauce-labs-backpack"]').click()
+    wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-test="add-to-cart-sauce-labs-backpack"]'))).click()
     badge = (By.CSS_SELECTOR, '[data-test="shopping-cart-badge"]')
     wait.until(EC.text_to_be_present_in_element(badge, '1'))
     wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-test="shopping-cart-link"]'))).click()
