@@ -1,0 +1,36 @@
+name: Playwright QA checks
+on:
+  push:
+    paths:
+      - 'web-api-automation/**'
+      - '.github/workflows/tests.yml'
+  pull_request:
+    paths:
+      - 'web-api-automation/**'
+      - '.github/workflows/tests.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web-api-automation
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+      - run: npx playwright install --with-deps chromium
+      - run: npm test
+      - name: Upload HTML report and test artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            web-api-automation/playwright-report/
+            web-api-automation/test-results/
+          if-no-files-found: ignore
