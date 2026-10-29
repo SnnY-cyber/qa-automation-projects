@@ -11,7 +11,7 @@ python -m pip install -r python-selenium/requirements.txt
 pytest -q python-selenium/tests
 ```
 
-The checkout uses the documented demo account and made-up customer details. The invalid-login case verifies the visible validation message. Waits target page state instead of using fixed sleeps.
+The checkout uses the documented demo account and made-up customer details. The invalid-login case verifies the visible validation message. The test uses `data-test` attributes for actions and field IDs for checkout details. It waits for visible controls rather than using fixed sleeps.
 
 ## CI and evidence
 
