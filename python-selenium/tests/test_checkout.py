@@ -34,7 +34,15 @@ def test_standard_user_completes_checkout(driver):
     driver.find_element(By.ID, 'last-name').send_keys('Engineer')
     driver.find_element(By.ID, 'postal-code').send_keys('06000')
     driver.find_element(By.CSS_SELECTOR, '[data-test="continue"]').click()
-    wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-test="finish"]'))).click()
+    try:
+        finish = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-test="finish"]')))
+    except TimeoutException as exc:
+        page_text = driver.find_element(By.TAG_NAME, 'body').text.replace('\n', ' | ')[:500]
+        raise AssertionError(
+            f'Order overview did not appear. URL={driver.current_url}; '
+            f'title={driver.title}; page={page_text}'
+        ) from exc
+    finish.click()
     confirmation = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, '[data-test="complete-header"]')))
     assert confirmation.text == 'Thank you for your order!'
 
