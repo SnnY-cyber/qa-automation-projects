@@ -24,7 +24,7 @@ def test_standard_user_completes_checkout(driver):
     driver.find_element(By.CSS_SELECTOR, '[data-test="lastName"]').send_keys('Engineer')
     driver.find_element(By.CSS_SELECTOR, '[data-test="postalCode"]').send_keys('06000')
     driver.find_element(By.CSS_SELECTOR, '[data-test="continue"]').click()
-    driver.find_element(By.CSS_SELECTOR, '[data-test="finish"]').click()
+    wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-test="finish"]'))).click()
     confirmation = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, '[data-test="complete-header"]')))
     assert confirmation.text == 'Thank you for your order!'
 
