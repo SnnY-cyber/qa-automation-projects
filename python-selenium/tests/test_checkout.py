@@ -17,9 +17,9 @@ def test_standard_user_completes_checkout(driver):
     wait = sign_in(driver)
     wait.until(EC.url_contains('inventory.html'))
     wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-test="add-to-cart-sauce-labs-backpack"]'))).click()
-    badge = (By.CSS_SELECTOR, '[data-test="shopping-cart-badge"]')
-    wait.until(EC.text_to_be_present_in_element(badge, '1'))
     wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-test="shopping-cart-link"]'))).click()
+    cart_item = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, '[data-test="inventory-item-name"]')))
+    assert cart_item.text == 'Sauce Labs Backpack'
     wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-test="checkout"]'))).click()
     wait.until(EC.visibility_of_element_located((By.ID, 'first-name'))).send_keys('QA')
     driver.find_element(By.ID, 'last-name').send_keys('Engineer')
