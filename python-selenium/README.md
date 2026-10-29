@@ -1,6 +1,6 @@
-# Selenium checkout checks
+# Selenium login validation
 
-This folder has two browser checks against the public SauceDemo store: one standard-user checkout and one invalid-login error. The examples are intentionally small so a failed step is easy to locate in the pytest output.
+This folder contains a focused negative-login check for the public SauceDemo store. It enters invalid credentials and verifies the error shown to the user. The checkout happy path lives in the Playwright suite, where the cart and order flow is already covered.
 
 ## Run
 
@@ -11,10 +11,8 @@ python -m pip install -r python-selenium/requirements.txt
 pytest -q python-selenium/tests
 ```
 
-The checkout uses the documented demo account and made-up customer details. The invalid-login case verifies the visible validation message. The test uses `data-test` attributes for actions and checkout fields. It waits for visible controls rather than using fixed sleeps.
+The test uses `data-test` selectors and an explicit wait for the validation message; it has no fixed sleep and uses no real account.
 
 ## CI and evidence
 
-GitHub Actions runs this suite on changes under `python-selenium/`. If a test fails, the workflow uploads a screenshot to the run artifacts. It does not require a personal browser session or secret.
-
-This is a public-demo example. A demo-site outage or markup change can break it independently of the test code. See [`../docs/test-approach.md`](../docs/test-approach.md) for coverage choices and limits.
+GitHub Actions runs the Selenium check on changes under `python-selenium/`. If it fails, the workflow uploads a screenshot to the run artifacts. It does not require a personal browser session or secret. The demo site is external, so availability and markup changes can affect results.
