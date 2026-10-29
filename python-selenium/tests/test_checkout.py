@@ -1,4 +1,5 @@
 from selenium.webdriver.common.by import By
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
@@ -21,7 +22,15 @@ def test_standard_user_completes_checkout(driver):
     cart_item = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, '[data-test="inventory-item-name"]')))
     assert cart_item.text == 'Sauce Labs Backpack'
     wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-test="checkout"]'))).click()
-    wait.until(EC.visibility_of_element_located((By.ID, 'first-name'))).send_keys('QA')
+    try:
+        first_name = wait.until(EC.visibility_of_element_located((By.ID, 'first-name')))
+    except TimeoutException as exc:
+        page_text = driver.find_element(By.TAG_NAME, 'body').text.replace('\n', ' | ')[:500]
+        raise AssertionError(
+            f'Checkout form did not appear. URL={driver.current_url}; '
+            f'title={driver.title}; page={page_text}'
+        ) from exc
+    first_name.send_keys('QA')
     driver.find_element(By.ID, 'last-name').send_keys('Engineer')
     driver.find_element(By.ID, 'postal-code').send_keys('06000')
     driver.find_element(By.CSS_SELECTOR, '[data-test="continue"]').click()
