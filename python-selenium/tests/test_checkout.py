@@ -18,10 +18,20 @@ def test_standard_user_completes_checkout(driver):
     wait = sign_in(driver)
     wait.until(EC.url_contains('inventory.html'))
     wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-test="add-to-cart-sauce-labs-backpack"]'))).click()
-    wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-test="shopping-cart-link"]'))).click()
+    cart_link = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-test="shopping-cart-link"]')))
+    cart_href = cart_link.get_attribute('href')
+    cart_link.click()
+    try:
+        checkout = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-test="checkout"]')))
+    except TimeoutException as exc:
+        page_text = driver.find_element(By.TAG_NAME, 'body').text.replace('\n', ' | ')[:500]
+        raise AssertionError(
+            f'Cart page did not appear. URL={driver.current_url}; '
+            f'cart_link={cart_href}; page={page_text}'
+        ) from exc
     cart_item = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, '[data-test="inventory-item-name"]')))
     assert cart_item.text == 'Sauce Labs Backpack'
-    wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-test="checkout"]'))).click()
+    checkout.click()
     try:
         first_name = wait.until(EC.visibility_of_element_located((By.ID, 'first-name')))
     except TimeoutException as exc:
