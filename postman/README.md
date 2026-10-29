@@ -1,16 +1,20 @@
-# Postman + Newman API Checks
+# Postman API checks
 
-An importable Postman v2.1 collection covering a GET response contract, a POST create response, and an unknown-resource negative case against JSONPlaceholder.
+`QA-API-Checks.postman_collection.json` contains three checks against JSONPlaceholder:
+
+- `GET /posts/1`: status and required response fields
+- `POST /posts`: status and echoed payload fields
+- `GET /posts/999999`: not-found status for an unknown resource
 
 ## Run
-Import `QA-API-Checks.postman_collection.json` into Postman, or run it with Newman:
+
+Import the collection into Postman, or from the repository root run:
 
 ```bash
-npm install --global newman
-newman run QA-API-Checks.postman_collection.json
+npm install --global newman@6
+newman run postman/QA-API-Checks.postman_collection.json
 ```
 
-The collection uses public demo endpoints and synthetic payloads. JSONPlaceholder simulates writes; created records are not persisted.
+The POST check only validates the demo response. JSONPlaceholder does not persist the created item, so this is not a persistence test. The assertions focus on response behavior rather than repeating the same checks through a browser.
 
-## CI
-GitHub Actions runs the collection on pushes and pull requests and publishes the Newman report as a workflow artifact. A Jenkins example is in `../Jenkinsfile`.
+GitHub Actions runs Newman on changes under `postman/` and uploads a JUnit report. See [`../docs/test-approach.md`](../docs/test-approach.md) for the suite assumptions.
