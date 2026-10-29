@@ -31,16 +31,23 @@ def test_standard_user_completes_checkout(driver):
             f'title={driver.title}; page={page_text}'
         ) from exc
     first_name.send_keys('QA')
-    driver.find_element(By.ID, 'last-name').send_keys('Engineer')
-    driver.find_element(By.ID, 'postal-code').send_keys('06000')
-    driver.find_element(By.CSS_SELECTOR, '[data-test="continue"]').click()
+    last_name = wait.until(EC.visibility_of_element_located((By.ID, 'last-name')))
+    last_name.send_keys('Engineer')
+    postal_code = wait.until(EC.visibility_of_element_located((By.ID, 'postal-code')))
+    postal_code.send_keys('06000')
+    assert (first_name.get_attribute('value'), last_name.get_attribute('value'), postal_code.get_attribute('value')) == ('QA', 'Engineer', '06000')
+    wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-test="continue"]'))).click()
     try:
         finish = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-test="finish"]')))
     except TimeoutException as exc:
         page_text = driver.find_element(By.TAG_NAME, 'body').text.replace('\n', ' | ')[:500]
+        error_nodes = driver.find_elements(By.CSS_SELECTOR, '[data-test="error"]')
+        error_text = error_nodes[0].text if error_nodes else 'none'
         raise AssertionError(
             f'Order overview did not appear. URL={driver.current_url}; '
-            f'title={driver.title}; page={page_text}'
+            f'title={driver.title}; form_values={first_name.get_attribute("value")},'
+            f'{last_name.get_attribute("value")},{postal_code.get_attribute("value")}; '
+            f'error={error_text}; page={page_text}'
         ) from exc
     finish.click()
     confirmation = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, '[data-test="complete-header"]')))
