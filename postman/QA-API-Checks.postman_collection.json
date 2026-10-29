@@ -25,7 +25,7 @@
               "  pm.expect(body).to.have.property('userId', 1);",
               "  pm.expect(body.title).to.be.a('string').and.not.empty;",
               "  pm.expect(body.body).to.be.a('string').and.not.empty;",
-              "}"
+              "});"
             ]
           }
         }
@@ -60,7 +60,7 @@
               "  pm.expect(body.body).to.eql('Created from a Newman collection');",
               "  pm.expect(body.userId).to.eql(7);",
               "  pm.expect(body.id).to.be.a('number');",
-              "}"
+              "});"
             ]
           }
         }
