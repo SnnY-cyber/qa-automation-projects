@@ -33,7 +33,7 @@ def test_standard_user_completes_checkout(driver):
     assert cart_item.text == 'Sauce Labs Backpack'
     checkout.click()
     try:
-        first_name = wait.until(EC.visibility_of_element_located((By.ID, 'first-name')))
+        first_name = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, '[data-test="firstName"]')))
     except TimeoutException as exc:
         page_text = driver.find_element(By.TAG_NAME, 'body').text.replace('\n', ' | ')[:500]
         raise AssertionError(
@@ -41,9 +41,9 @@ def test_standard_user_completes_checkout(driver):
             f'title={driver.title}; page={page_text}'
         ) from exc
     first_name.send_keys('QA')
-    last_name = wait.until(EC.visibility_of_element_located((By.ID, 'last-name')))
+    last_name = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, '[data-test="lastName"]')))
     last_name.send_keys('Engineer')
-    postal_code = wait.until(EC.visibility_of_element_located((By.ID, 'postal-code')))
+    postal_code = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, '[data-test="postalCode"]')))
     postal_code.send_keys('06000')
     assert (first_name.get_attribute('value'), last_name.get_attribute('value'), postal_code.get_attribute('value')) == ('QA', 'Engineer', '06000')
     wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-test="continue"]'))).click()
