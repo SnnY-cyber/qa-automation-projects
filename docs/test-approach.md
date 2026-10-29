@@ -6,8 +6,8 @@ These examples answer a narrow question: can a reviewer see the critical behavio
 
 | Risk / behavior | Check | Why this level |
 |---|---|---|
-| A valid user can complete a purchase | Playwright and Selenium checkout flow | It exercises login, inventory, cart contents, and confirmation in one path.
-| Invalid credentials are rejected | Browser negative test | The error should be visible to the user without reaching inventory.
+| A valid user can complete a purchase | Playwright checkout flow | It exercises login, inventory, cart contents, and confirmation in one path.
+| Invalid credentials are rejected | Selenium negative-login check | The error should be visible to the user without reaching inventory.
 | A known API response has the expected fields | Postman/Newman and Playwright API checks | Contract failures are faster to isolate outside the UI.
 | A submitted demo resource returns a create response | Newman POST check | Confirms response shape/status; the demo service does not persist writes.
 | An unknown resource returns not found | API negative-path check | Covers a useful boundary without adding test data setup.
