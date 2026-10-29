@@ -1,3 +1,5 @@
+[![Playwright QA checks](https://github.com/SnnY-cyber/qa-automation-projects/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/SnnY-cyber/qa-automation-projects/actions/workflows/tests.yml)
+
 # QA Automation Projects
 
 A portfolio bundle of test automation samples.
@@ -7,3 +9,6 @@ A portfolio bundle of test automation samples.
 - [Manual QA samples](web-api-automation/manual-qa-samples.md): checkout scenario and sample bug report.
 
 Projects target public demo apps and contain no secrets or production data. Update each README with your own notes as you learn and extend the examples.
+
+
+
