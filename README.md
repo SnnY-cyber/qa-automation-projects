@@ -1,5 +1,9 @@
 # QA Automation Lab
 
+[![Playwright](https://github.com/SnnY-cyber/qa-automation-projects/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/SnnY-cyber/qa-automation-projects/actions/workflows/tests.yml) [![Selenium](https://github.com/SnnY-cyber/qa-automation-projects/actions/workflows/selenium-python.yml/badge.svg?branch=main)](https://github.com/SnnY-cyber/qa-automation-projects/actions/workflows/selenium-python.yml) [![Newman](https://github.com/SnnY-cyber/qa-automation-projects/actions/workflows/postman-newman.yml/badge.svg?branch=main)](https://github.com/SnnY-cyber/qa-automation-projects/actions/workflows/postman-newman.yml)
+
+**CI status** — Playwright, Selenium, and Newman checks run in GitHub Actions. Open a badge to see the latest run and its logs.
+
 I use this repository to show how I break a small QA problem into focused checks and make the results visible in CI. The browser and API suites target public demo services; the examples use synthetic data and are separate from any employer or production system.
 
 ## Projects
