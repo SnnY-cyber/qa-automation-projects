@@ -1,0 +1,6 @@
+node_modules/
+playwright-report/
+test-results/
+.env
+*.apk
+.DS_Store
