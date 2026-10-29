@@ -1,0 +1,88 @@
+{
+  "info": {
+    "_postman_id": "qa-portfolio-api-tests",
+    "name": "QA Portfolio API Checks",
+    "description": "Data contract, create and negative-path checks using the public JSONPlaceholder demo API.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "GET post - contract",
+      "request": {
+        "method": "GET",
+        "url": "https://jsonplaceholder.typicode.com/posts/1"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('returns HTTP 200', () => pm.response.to.have.status(200));",
+              "const body = pm.response.json();",
+              "pm.test('has expected identifiers and fields', () => {",
+              "  pm.expect(body).to.have.property('id', 1);",
+              "  pm.expect(body).to.have.property('userId', 1);",
+              "  pm.expect(body.title).to.be.a('string').and.not.empty;",
+              "  pm.expect(body.body).to.be.a('string').and.not.empty;",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST post - create",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"title\":\"QA sample\",\"body\":\"Created from a Newman collection\",\"userId\":7}"
+        },
+        "url": "https://jsonplaceholder.typicode.com/posts"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('returns HTTP 201', () => pm.response.to.have.status(201));",
+              "const body = pm.response.json();",
+              "pm.test('echoes the submitted payload', () => {",
+              "  pm.expect(body.title).to.eql('QA sample');",
+              "  pm.expect(body.body).to.eql('Created from a Newman collection');",
+              "  pm.expect(body.userId).to.eql(7);",
+              "  pm.expect(body.id).to.be.a('number');",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "GET missing post - negative path",
+      "request": {
+        "method": "GET",
+        "url": "https://jsonplaceholder.typicode.com/posts/999999"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('returns HTTP 404 for an unknown resource', () => pm.response.to.have.status(404));"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
