@@ -1,5 +1,6 @@
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
@@ -17,10 +18,15 @@ def sign_in(driver, username='standard_user', password='secret_sauce'):
 def test_standard_user_completes_checkout(driver):
     wait = sign_in(driver)
     wait.until(EC.url_contains('inventory.html'))
-    wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-test="add-to-cart-sauce-labs-backpack"]'))).click()
+    wait.until(lambda browser: len(browser.find_elements(By.CSS_SELECTOR, '[data-test="inventory-item"]')) >= 1)
+    add_button = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-test="add-to-cart-sauce-labs-backpack"]')))
+    ActionChains(driver).move_to_element(add_button).click().perform()
+    wait.until(lambda browser: browser.find_elements(By.CSS_SELECTOR, '[data-test="remove-sauce-labs-backpack"]')
+               or (browser.find_elements(By.CSS_SELECTOR, '[data-test="shopping-cart-badge"]')
+                   and browser.find_element(By.CSS_SELECTOR, '[data-test="shopping-cart-badge"]').text == '1'))
     cart_link = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-test="shopping-cart-link"]')))
     cart_href = cart_link.get_attribute('href')
-    cart_link.click()
+    ActionChains(driver).move_to_element(cart_link).click().perform()
     try:
         checkout = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-test="checkout"]')))
     except TimeoutException as exc:
